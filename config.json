@@ -1,0 +1,7 @@
+{
+    "input_folder": "input_files",
+    "chunk_prefix": "Synthwave_",
+    "file_names": ["AllNight", "AnotherOne", "BlueLights", "Breakout", "Colors", "ComeBack", "Desire", "Exchange", "FeelIt", "Funky", "Highway", "Illusion", "Kiss", "Mania", "MyLove", "Nostalgia", "RunAway", "Stargate", "TheWay", "Tonight", "OriginalMix"],
+    "sample_names": ["clp1", "clp2", "tom1", "tom2", "shk1", "shk2", "tmb1", "tmb2", "kd1", "kd2", "sd1", "sd2", "ch1", "ch2", "oh", "crsh", "ride", "prc1", "fx1", "prc2", "fx2", "fx3", "shk3", "shk4", "tmb3", "tmb4", "clp3"]
+}
+  
