@@ -1,6 +1,6 @@
 import json
 from pydub import AudioSegment
-from pydub.silence import split_on_silence
+from pydub.silence import split_on_silence, detect_nonsilent
 import os
 
 def normalize_audio(chunk, target_dBFS=-0.1):
@@ -10,6 +10,16 @@ def normalize_audio(chunk, target_dBFS=-0.1):
     
     # Apply the gain to normalize the chunk
     return chunk.apply_gain(change_in_dBFS)
+
+def trim_silence(chunk):
+    """Trim leading silence from the chunk."""
+    nonsilent_ranges = detect_nonsilent(chunk, min_silence_len=100, silence_thresh=-50)
+    
+    if not nonsilent_ranges:
+        return chunk  # No non-silent parts found; return the original chunk
+
+    start_trim = nonsilent_ranges[0][0]  # Start of the first non-silent portion
+    return chunk[start_trim:]
 
 def split_audio_on_silence(file_name, output_dir, silence_thresh=-50, min_silence_len=500, keep_silence=200):
     file_path = f"{input_folder}/{file_name}.aif"
@@ -27,16 +37,19 @@ def split_audio_on_silence(file_name, output_dir, silence_thresh=-50, min_silenc
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
 
-    for i, chunk in enumerate(audio_chunks):
-        # Normalize each chunk to -0.1 dBFS to avoid digital clipping
-        normalized_chunk = normalize_audio(chunk, target_dBFS=-0.1)
+    for i, chunk in enumerate(audio_chunks):    
+        # Trim leading silence
+        trimmed_chunk = trim_silence(chunk)
+        
+        # # Normalize each chunk to -0.1 dBFS to avoid digital clipping
+        # normalized_chunk = normalize_audio(chunk, target_dBFS=-0.1)
         
         if i < len(sample_names):
             chunk_filename = os.path.join(output_dir, f"{chunk_prefix}{file_name}_{sample_names[i]}.aif")
         else:
             chunk_filename = os.path.join(output_dir, f"{chunk_prefix}{file_name}_chunk{i+1}.aif")
-
-        normalized_chunk.export(chunk_filename, format="aiff")
+        
+        trimmed_chunk.export(chunk_filename, format="aiff")
         print(f"Exported {chunk_filename}")
 
 # Load the JSON configuration
