@@ -3,6 +3,14 @@ from pydub import AudioSegment
 from pydub.silence import split_on_silence
 import os
 
+def normalize_audio(chunk, target_dBFS=-0.1):
+    """Normalize the audio chunk to the target dBFS."""
+    # Calculate the difference between the target dBFS and the current chunk's dBFS
+    change_in_dBFS = target_dBFS - chunk.dBFS
+    
+    # Apply the gain to normalize the chunk
+    return chunk.apply_gain(change_in_dBFS)
+
 def split_audio_on_silence(file_name, output_dir, silence_thresh=-50, min_silence_len=500, keep_silence=200):
     file_path = f"{input_folder}/{file_name}.aif"
     print(f"Reading {file_name}")
@@ -20,12 +28,15 @@ def split_audio_on_silence(file_name, output_dir, silence_thresh=-50, min_silenc
         os.makedirs(output_dir)
 
     for i, chunk in enumerate(audio_chunks):
+        # Normalize each chunk to -0.1 dBFS to avoid digital clipping
+        normalized_chunk = normalize_audio(chunk, target_dBFS=-0.1)
+        
         if i < len(sample_names):
             chunk_filename = os.path.join(output_dir, f"{chunk_prefix}{file_name}_{sample_names[i]}.aif")
         else:
             chunk_filename = os.path.join(output_dir, f"{chunk_prefix}{file_name}_chunk{i+1}.aif")
 
-        chunk.export(chunk_filename, format="aiff")
+        normalized_chunk.export(chunk_filename, format="aiff")
         print(f"Exported {chunk_filename}")
 
 # Load the JSON configuration
