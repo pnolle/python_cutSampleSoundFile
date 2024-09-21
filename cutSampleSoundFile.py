@@ -41,4 +41,10 @@ input_folder = config["input_folder"]
 # Loop through the file names, assuming each corresponds to an AIF file
 for file in file_names:
     input_file = f"{file}"
+
+    file_path = f"{input_folder}/{input_file}.aif"
+    if not os.path.exists(file_path):
+        print(f"File {input_file}.aif does not exist. Skipping...")
+        continue  # Skip to the next sample if the file is missing
+
     split_audio_on_silence(input_file, f"output_chunks")
