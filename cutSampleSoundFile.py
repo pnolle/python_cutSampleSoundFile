@@ -3,14 +3,6 @@ from pydub import AudioSegment
 from pydub.silence import split_on_silence, detect_nonsilent
 import os
 
-def normalize_audio(chunk, target_dBFS=-0.1):
-    """Normalize the audio chunk to the target dBFS."""
-    # Calculate the difference between the target dBFS and the current chunk's dBFS
-    change_in_dBFS = target_dBFS - chunk.dBFS
-    
-    # Apply the gain to normalize the chunk
-    return chunk.apply_gain(change_in_dBFS)
-
 def trim_silence(chunk):
     """Trim leading silence from the chunk."""
     nonsilent_ranges = detect_nonsilent(chunk, min_silence_len=100, silence_thresh=-50)
@@ -40,16 +32,16 @@ def split_audio_on_silence(file_name, output_dir, silence_thresh=-50, min_silenc
     for i, chunk in enumerate(audio_chunks):    
         # Trim leading silence
         trimmed_chunk = trim_silence(chunk)
-        
-        # # Normalize each chunk to -0.1 dBFS to avoid digital clipping
-        # normalized_chunk = normalize_audio(chunk, target_dBFS=-0.1)
+            
+        # Normalize the trimmed chunk using pydub's built-in method
+        normalized_chunk = trimmed_chunk.normalize()
         
         if i < len(sample_names):
             chunk_filename = os.path.join(output_dir, f"{chunk_prefix}{file_name}_{sample_names[i]}.aif")
         else:
             chunk_filename = os.path.join(output_dir, f"{chunk_prefix}{file_name}_chunk{i+1}.aif")
         
-        trimmed_chunk.export(chunk_filename, format="aiff")
+        normalized_chunk.export(chunk_filename, format="aiff")
         print(f"Exported {chunk_filename}")
 
 # Load the JSON configuration
