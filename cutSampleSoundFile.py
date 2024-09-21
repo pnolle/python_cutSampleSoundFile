@@ -21,9 +21,9 @@ def split_audio_on_silence(file_name, output_dir, silence_thresh=-50, min_silenc
 
     for i, chunk in enumerate(audio_chunks):
         if i < len(sample_names):
-            chunk_filename = os.path.join(output_dir, f"{sample_names[i]}.aif")
+            chunk_filename = os.path.join(output_dir, f"{chunk_prefix}{file_name}_{sample_names[i]}.aif")
         else:
-            chunk_filename = os.path.join(output_dir, f"chunk_{i+1}.aif")
+            chunk_filename = os.path.join(output_dir, f"{chunk_prefix}chunk_{i+1}.aif")
 
         chunk.export(chunk_filename, format="aiff")
         print(f"Exported {chunk_filename}")
