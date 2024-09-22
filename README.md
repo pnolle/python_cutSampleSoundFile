@@ -7,5 +7,8 @@ Assuming you have an AIF file that contains sample sound with silence in between
 ## How to use
 
 * run Docker daemon
-* ``docker build -t cuts_img .``, while cuts_img is my chosen image name
-* ``docker run -v ./:/usr/src/app cuts_img``
+* ``docker build -t cuts_img .``, while ``cuts_img`` is my chosen image name
+* ``docker run --rm -v ./:/usr/src/app cuts_img``, which
+  * starts the image as a container
+  * with the ``--rm`` option to remove the container after the job is done
+  * and the ``-v`` option to map the local folder to the ``/usr/src/app`` folder within the container, where the script is working

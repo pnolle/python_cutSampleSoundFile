@@ -37,9 +37,9 @@ def split_audio_on_silence(file_name, output_dir, silence_thresh=-50, min_silenc
         normalized_chunk = trimmed_chunk.normalize()
         
         if i < len(sample_names):
-            chunk_filename = os.path.join(output_dir, f"{chunk_prefix}{file_name}_{sample_names[i]}.aif")
+            chunk_filename = os.path.join(output_dir, f"{chunk_prefix}{sample_names[i]}_{file_name}.aif")
         else:
-            chunk_filename = os.path.join(output_dir, f"{chunk_prefix}{file_name}_chunk{i+1}.aif")
+            chunk_filename = os.path.join(output_dir, f"{chunk_prefix}chunk{i+1}_{file_name}.aif")
         
         normalized_chunk.export(chunk_filename, format="aiff")
         print(f"Exported {chunk_filename}")
