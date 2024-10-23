@@ -1,4 +1,5 @@
-FROM python:3
+# Use Python 3.12 for 'pyaudioop' compatibility (instead of 3.13)
+FROM python:3.12
 
 # Set working directory
 WORKDIR /usr/src/app
