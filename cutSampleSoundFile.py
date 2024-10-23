@@ -13,7 +13,7 @@ def trim_silence(chunk):
     start_trim = nonsilent_ranges[0][0]  # Start of the first non-silent portion
     return chunk[start_trim:]
 
-def split_audio_on_silence(file_name, output_dir, silence_thresh=-50, min_silence_len=500, keep_silence=200):
+def split_audio_on_silence(file_name, output_dir, silence_thresh=-50, min_silence_len=50, keep_silence=100):
     file_path = f"{input_folder}/{file_name}.aif"
     print(f"Reading {file_name}")
     
