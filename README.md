@@ -12,3 +12,7 @@ Assuming you have an AIF file that contains sample sound with silence in between
   * starts the image as a container
   * with the ``--rm`` option to remove the container after the job is done
   * and the ``-v`` option to map the local folder to the ``/usr/src/app`` folder within the container, where the script is working
+
+## Disclaimer
+
+I discussed the development of this script with AI tools.
